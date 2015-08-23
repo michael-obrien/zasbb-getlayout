@@ -10,5 +10,6 @@ RUN npm install
 RUN npm build
 
 EXPOSE 10104
+ENV ZASBB_FUNCTION="Get Layout"
 
 ENTRYPOINT ["npm", "start"]
