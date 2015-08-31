@@ -7,7 +7,6 @@
 var seneca = require('seneca')();
 
 seneca.listen(10104); //requests from Hapi REST
-seneca.client(10101); //requests to Directory Services
 
 var userLevel = 0; //0 Public, //3 User, //6 Admin
 
@@ -19,6 +18,16 @@ var layout = {
   threadlist: [],
   role: []
 };
+
+//discovery
+seneca.add({cmd:'config'}, function (msg, response) {
+  msg.data.forEach(function (item) {
+    if (item.name === 'Directory') {
+      seneca.client({host:item.address, port:10101});
+    }
+  })
+  response(null, msg.data);
+});
 
 seneca.add({role: "get",cmd: "section"}, function( msg, respond) {
   var requested = msg.id;
